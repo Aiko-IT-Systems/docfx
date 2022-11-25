@@ -16,9 +16,7 @@
     <ItemGroup>
       <TestData Include="TestData/**/*" />
     </ItemGroup>
-    <Copy 
-      SourceFiles="@(TestData)" 
-      DestinationFiles="@(TestData->'$(OutputPath)\TestData\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(TestData)" DestinationFiles="@(TestData->'$(OutputPath)\TestData\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 
   <ItemGroup>
@@ -29,6 +27,10 @@
     <ProjectReference Include="..\..\src\Microsoft.DocAsCode.DataContracts.ManagedReference\Microsoft.DocAsCode.DataContracts.ManagedReference.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.DocAsCode.YamlSerialization\Microsoft.DocAsCode.YamlSerialization.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.DocAsCode.Common\Microsoft.DocAsCode.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.4.0" />
   </ItemGroup>
 
 </Project>

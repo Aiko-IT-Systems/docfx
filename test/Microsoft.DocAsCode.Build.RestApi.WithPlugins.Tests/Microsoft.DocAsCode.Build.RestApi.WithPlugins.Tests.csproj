@@ -16,4 +16,8 @@
     <ProjectReference Include="..\..\src\Microsoft.DocAsCode.DataContracts.RestApi\Microsoft.DocAsCode.DataContracts.RestApi.csproj" />
     <ProjectReference Include="..\Microsoft.DocAsCode.Tests.Common\Microsoft.DocAsCode.Tests.Common.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+  </ItemGroup>
 </Project>

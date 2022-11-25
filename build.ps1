@@ -82,6 +82,7 @@ if ($prod -eq $true) {
 
     ProcessLastExitCode $lastexitcode "Get GIT commit information $commitInfo"
     if ($commitInfo.length -gt 1) {
+        Write-Host "Trying to use substring on data & commit info"
         $revision = (Get-Date -UFormat "%Y%m%d").Substring(2) + $commitInfo[1].PadLeft(3, '0')
     }
     else {
@@ -91,10 +92,12 @@ if ($prod -eq $true) {
     $assemblyVersion = (($version + '0') -join '.').Substring(1)
     $assemblyFileVersion = (($version + $revision) -join '.').Substring(1)
     if ($branch -ne $releaseBranch) {
+        Write-Host "Trying to use substring on commit info"
         $abbrev = $commitInfo[2].Substring(0, 7)
         $packageVersion = ((($version -join '.'), "b", $revision, $abbrev) -join '-').Substring(1)
     }
     else {
+        Write-Host "Trying to use substring on version"
         $packageVersion = ($version -join ".").Substring(1)
     }
 

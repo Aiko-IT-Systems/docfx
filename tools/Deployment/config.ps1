@@ -1,9 +1,9 @@
 ﻿$homeDir = (Resolve-Path "$PSScriptRoot\..\..").Path
 
 $docfx = @{
-    httpsRepoUrl = "https://github.com/dotnet/docfx.git"
-    httpsRepoUrlWithToken = "https://{0}@github.com/dotnet/docfx.git"
-    sshRepoUrl = "git@github.com-ci:dotnet/docfx.git"
+    httpsRepoUrl = "https://github.com/Aiko-IT-Systems/docfx.git"
+    httpsRepoUrlWithToken = "https://{0}@github.com/Aiko-IT-Systems/docfx.git"
+    sshRepoUrl = "git@github.com-ci:Aiko-IT-Systems/docfx.git"
     docfxSeedRepoUrl = "https://github.com/docascode/docfx-seed.git"
     docfxSeedHome = "$homeDir\test\docfx-seed"
     targetFolder = "$homeDir\target"

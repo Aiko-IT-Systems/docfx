@@ -1,12 +1,16 @@
 Version Notes (Current Version: v2.59.5)
 =======================================
 
+v2.60.0
+-----------
+1. Upgrade stuff to fix shit 
+
 v2.59.5
 -----------
 1. Fix: TOC word-break not being inserted in generic types. Thanks @julesabr! (#8217)
 2. Crash fixes for CopyInherited. Thanks @Sorpirit (#7709)
 3. Fix on DocFX crashes on method parameter [Optional][DefaultParameterValue(0)]. Thanks @harriev9 (#8208)
-4: Upgrade libraries to support .NET 6.0. Thanks @tibel (#8238 #8239)
+4. Upgrade libraries to support .NET 6.0. Thanks @tibel (#8238 #8239)
 
 v2.59.4
 -----------

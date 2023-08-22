@@ -86,7 +86,7 @@ var gitUrlPatternItems = {
             url += '/new';
             url += '/' + gitInfo.branch;
             url += '/' + getOverrideFolder(gitInfo.apiSpecFolder);
-            url += '/new?filename=' + getHtmlId(uid) + '.md';
+            url += '?filename=' + getHtmlId(uid) + '.md';
             url += '&value=' + encodeURIComponent(getOverrideTemplate(uid));
             return url;
         }

@@ -40,6 +40,9 @@ export async function init(options: DocfxOptions) {
 
   async function renderNav() {
     const [navbar, toc] = await Promise.all([renderNavbar(), renderToc()])
+    if (navbar === undefined) {
+      throw new Error('navbar is undefined')
+    }
     renderBreadcrumb([...navbar, ...toc])
   }
 }

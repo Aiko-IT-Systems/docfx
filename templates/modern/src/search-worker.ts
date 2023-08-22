@@ -3,10 +3,40 @@
 
 import lunr from 'lunr'
 
-let lunrIndex
+/**
+ * The item in the search index.
+ */
+export interface Item {
+  /**
+   * The href of the page.
+  */
+  href: string;
 
-let stopWords = null
-let searchData = {}
+  /**
+   * The title of the page.
+  */
+  title: string;
+
+  /**
+   * The keywords of the page.
+  */
+  keywords: string;
+}
+
+/**
+ * The search index data.
+ */
+export interface SearchData {
+  /**
+   * The search index.
+  */
+  [key: string]: Item;
+}
+
+let lunrIndex: lunr.Index
+
+let stopWords: string[] | null = null
+let searchData: SearchData = {}
 
 lunr.tokenizer.separator = /[\s\-.()]+/
 
@@ -38,12 +68,14 @@ searchDataRequest.send()
 
 onmessage = function(oEvent) {
   const q = oEvent.data.q
-  const results = []
+  const results: Item[] = []
   if (lunrIndex) {
-    const hits = lunrIndex.search(q)
+    const hits: lunr.Index.Result[] = lunrIndex.search(q)
     hits.forEach(function(hit) {
       const item = searchData[hit.ref]
-      results.push({ href: item.href, title: item.title, keywords: item.keywords })
+      if (item !== undefined) {
+        results.push({ href: item.href, title: item.title, keywords: item.keywords })
+      }
     })
   }
   postMessage({ e: 'query-ready', q, d: results })
@@ -59,19 +91,24 @@ function buildIndex() {
 
       for (const prop in searchData) {
         if (Object.prototype.hasOwnProperty.call(searchData, prop)) {
-          this.add(searchData[prop])
+          const data = searchData[prop]
+          if (data !== undefined) {
+            this.add(data)
+          }
         }
       }
 
-      const docfxStopWordFilter = lunr.generateStopWordFilter(stopWords)
-      lunr.Pipeline.registerFunction(docfxStopWordFilter, 'docfxStopWordFilter')
-      this.pipeline.add(docfxStopWordFilter)
-      this.searchPipeline.add(docfxStopWordFilter)
+      if (stopWords !== null) {
+        const docfxStopWordFilter = lunr.generateStopWordFilter(stopWords)
+        lunr.Pipeline.registerFunction(docfxStopWordFilter, 'docfxStopWordFilter')
+        this.pipeline.add(docfxStopWordFilter)
+        this.searchPipeline.add(docfxStopWordFilter)
+      }
     })
   }
 }
 
-function isEmpty(obj) {
+function isEmpty(obj: SearchData) {
   if (!obj) return true
 
   for (const prop in obj) {

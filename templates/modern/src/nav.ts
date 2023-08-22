@@ -1,26 +1,48 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-import { render, html, TemplateResult } from 'lit-html'
+import { render, html } from 'lit-html'
 import { breakWordLit, meta, isExternalHref } from './helper'
 import { themePicker } from './theme'
 import { TocNode } from './toc'
 
-export type NavItem = {
-  name: string
-  href: URL
+/**
+ * The item in the navbar.
+ */
+export interface NavItem {
+  /**
+   * The name of the item.
+   */
+  name: string;
+
+  /**
+   * The href of the item.
+   * If the href is external, the item will not be highlighted.
+   */
+  href: URL;
 }
 
-export type NavItemContainer = {
-  name: string
-  items: NavItem[]
+/**
+ * The container in the navbar.
+ */
+export interface NavItemContainer {
+  /**
+   * The name of the item.
+   */
+  name: string;
+
+  /**
+   * The items in the container.
+   * If any item is active, the container will be highlighted.
+   */
+  items: NavItem[];
 }
 
 /**
  * @returns active navbar items
  */
-export async function renderNavbar(): Promise<NavItem[]> {
-  const navbar = document.getElementById('navbar')
+export async function renderNavbar(): Promise<NavItem[] | undefined> {
+  const navbar = document.getElementById('navbar')!
   if (!navbar) {
     return
   }
@@ -28,7 +50,7 @@ export async function renderNavbar(): Promise<NavItem[]> {
   const navItems = await loadNavItems()
   const activeItem = findActiveItem(navItems)
 
-  const menuItem = item => {
+  const menuItem = (item: NavItem) => {
     const current = (item === activeItem ? 'page' : false)
     const active = (item === activeItem ? 'active' : null)
     return html`<li class='nav-item'><a class='nav-link ${active}' aria-current=${current} href=${item.href}>${breakWordLit(item.name)}</a></li>`
@@ -55,7 +77,7 @@ export async function renderNavbar(): Promise<NavItem[]> {
     const icons = html`
       <form class="icons">
         ${window.docfx.iconLinks?.map(i => html`<a href="${i.href}" title="${i.title}" class="btn border-0"><i class="bi bi-${i.icon}"></i></a>`)}
-        ${themePicker(renderCore)}
+        ${window.docfx.disableThemeSelect ? '' : themePicker(renderCore)}
       </form>`
 
     render(html`${menu} ${icons}`, navbar)
@@ -110,7 +132,7 @@ function inThisArticleForConceptual() {
   }
 }
 
-function inThisArticleForManagedReference(): TemplateResult {
+function inThisArticleForManagedReference() {
   let headings = Array.from(document.querySelectorAll<HTMLHeadingElement>('article h2, article h3'))
   headings = headings.filter((h, i) => h.tagName === 'H3' || headings[i + 1]?.tagName === 'H3')
 
@@ -125,9 +147,9 @@ function inThisArticleForManagedReference(): TemplateResult {
   }
 }
 
-function findActiveItem(items: (NavItem | NavItemContainer)[]): NavItem {
+function findActiveItem(items: (NavItem | NavItemContainer)[]): NavItem | undefined {
   const url = new URL(window.location.href)
-  let activeItem: NavItem
+  let activeItem: NavItem | undefined
   let maxPrefix = 0
   for (const item of items.map(i => 'items' in i ? i.items : i).flat()) {
     if (isExternalHref(item.href)) {

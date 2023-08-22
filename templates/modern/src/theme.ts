@@ -35,13 +35,13 @@ export function themePicker(refresh: () => void) {
         <i class='bi bi-${icon}'></i>
       </a>
       <ul class='dropdown-menu'>
-        <li><a class='dropdown-item' href='#' @click=${e => changeTheme(e, 'light')}><i class='bi bi-sun'></i> Light</a></li>
-        <li><a class='dropdown-item' href='#' @click=${e => changeTheme(e, 'dark')}><i class='bi bi-moon'></i> Dark</a></li>
-        <li><a class='dropdown-item' href='#' @click=${e => changeTheme(e, 'auto')}><i class='bi bi-circle-half'></i> Auto</a></li>
+        <li><a class='dropdown-item' href='#' @click=${(e: Event) => changeTheme(e, 'light')}><i class='bi bi-sun'></i> Light</a></li>
+        <li><a class='dropdown-item' href='#' @click=${(e: Event) => changeTheme(e, 'dark')}><i class='bi bi-moon'></i> Dark</a></li>
+        <li><a class='dropdown-item' href='#' @click=${(e: Event) => changeTheme(e, 'auto')}><i class='bi bi-circle-half'></i> Auto</a></li>
       </ul>
     </div>`
 
-  function changeTheme(e, theme: Theme) {
+  function changeTheme(e: Event, theme: Theme) {
     e.preventDefault()
     setTheme(theme)
     refresh()

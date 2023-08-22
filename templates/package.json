@@ -37,10 +37,12 @@
     "mermaid": "^10.3.1"
   },
   "devDependencies": {
+    "@types/anchor-js": "^5.0.0",
     "@types/bootstrap": "^5.2.6",
     "@types/jest": "^29.5.3",
     "@types/jquery": "^3.5.16",
     "@types/lunr": "^2.3.4",
+    "@types/mathjax": "^0.0.37",
     "@types/node": "^20.4.7",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",

@@ -5,11 +5,29 @@ import { TemplateResult, html, render } from 'lit-html'
 import { classMap } from 'lit-html/directives/class-map.js'
 import { breakWordLit, meta, isExternalHref } from './helper'
 
-export type TocNode = {
-  name: string
-  href?: string
-  expanded?: boolean
-  items?: TocNode[]
+/**
+ * The toc node.
+ */
+export interface TocNode {
+  /**
+   * The name of the item.
+   */
+  name: string;
+
+  /**
+   * The href of the item.
+   */
+  href?: string;
+
+  /**
+   * Whether the item is expanded.
+   */
+  expanded?: boolean;
+
+  /**
+   * The items in the container.
+   */
+  items?: TocNode[];
 }
 
 /**
@@ -28,8 +46,8 @@ export async function renderToc(): Promise<TocNode[]> {
   const tocUrl = new URL(tocrel.replace(/.html$/gi, '.json'), window.location.href)
   const { items } = await (await fetch(tocUrl)).json()
 
-  const activeNodes = []
-  const selectedNodes = []
+  const activeNodes: TocNode[] = []
+  const selectedNodes: TocNode[] = []
   items.forEach(initTocNodes)
 
   const tocContainer = document.getElementById('toc')
@@ -80,10 +98,10 @@ export async function renderToc(): Promise<TocNode[]> {
   }
 
   function renderToc() {
-    render(html`${renderTocFilter()} ${renderTocNodes(items) || renderNoFilterResult()}`, tocContainer)
+    render(html`${renderTocFilter()} ${renderTocNodes(items) || renderNoFilterResult()}`, tocContainer!)
   }
 
-  function renderTocNodes(nodes: TocNode[]): TemplateResult {
+  function renderTocNodes(nodes: TocNode[]): TemplateResult | null {
     const result = nodes.map(node => {
       const { href, name, items, expanded } = node
       const isLeaf = !items || items.length <= 0
@@ -108,7 +126,7 @@ export async function renderToc(): Promise<TocNode[]> {
           ${children}
         </li>`
 
-      function toggleExpand(e) {
+      function toggleExpand(e: Event) {
         e.preventDefault()
         node.expanded = !isExpanded
         renderToc()
@@ -118,7 +136,7 @@ export async function renderToc(): Promise<TocNode[]> {
     return result.length > 0 ? html`<ul>${result}</ul>` : null
   }
 
-  function renderTocFilter(): TemplateResult {
+  function renderTocFilter(): TemplateResult | null {
     return disableTocFilter
       ? null
       : html`
@@ -134,7 +152,7 @@ export async function renderToc(): Promise<TocNode[]> {
     }
   }
 
-  function renderNoFilterResult(): TemplateResult {
+  function renderNoFilterResult(): TemplateResult | null {
     return tocFilter === '' ? null : html`<div class='no-result'>No results for "${tocFilter}"</div>`
   }
 
@@ -156,7 +174,7 @@ function renderNextArticle(items: TocNode[], node: TocNode) {
   }
 
   const tocNodes = flattenTocNodesWithHref(items)
-  const i = tocNodes.findIndex(n => n === node)
+  const i = tocNodes.findIndex((n: TocNode | undefined) => n === node)
   const prev = tocNodes[i - 1]
   const next = tocNodes[i + 1]
   if (!prev && !next) {
@@ -168,7 +186,7 @@ function renderNextArticle(items: TocNode[], node: TocNode) {
 
   render(html`${prevButton} ${nextButton}`, nextArticle)
 
-  function flattenTocNodesWithHref(items: TocNode[]) {
+  function flattenTocNodesWithHref(items: TocNode[]) : TocNode[] {
     const result = []
     for (const item of items) {
       if (item.href) {

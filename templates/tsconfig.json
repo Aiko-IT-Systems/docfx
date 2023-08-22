@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
+    "strict": true,
     "removeComments": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   }
 }

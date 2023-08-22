@@ -26,6 +26,9 @@ export type DocfxOptions = {
   /** Configures the default theme */
   defaultTheme?: Theme,
 
+  /** Disables the theme picker in the header */
+  disableThemeSelect: boolean,
+
   /** A list of icons to show in the header next to the theme picker */
   iconLinks?: IconLink[],
 

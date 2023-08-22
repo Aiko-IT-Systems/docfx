@@ -87,6 +87,10 @@ export function enableSearch() {
         return html`<div class="search-list">No results for "${query}"</div>`
       }
 
+      let newtab = '_self'
+      if (meta('docfx:disablenewtab') === 'true') {
+        newtab = '_blank'
+      }
       const start = page * numPerPage
       const curHits = hits.slice(start, start + numPerPage)
 
@@ -100,7 +104,7 @@ export function enableSearch() {
 
           return html`
             <div class="sr-item">
-              <div class="item-title"><a href="${itemHref}" target="_blank" rel="noopener noreferrer">${mark(hit.title, query)}</a></div>
+              <div class="item-title"><a href="${itemHref}" target="${newtab}" rel="noopener noreferrer">${mark(hit.title, query)}</a></div>
               <div class="item-href">${mark(itemRawHref, query)}</div>
               <div class="item-brief">${mark(itemBrief, query)}</div>
             </div>`

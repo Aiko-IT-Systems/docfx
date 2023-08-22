@@ -70,7 +70,9 @@ onmessage = function(oEvent) {
   const q = oEvent.data.q
   const results: Item[] = []
   if (lunrIndex) {
-    const hits: lunr.Index.Result[] = lunrIndex.search(q)
+    const hits: lunr.Index.Result[] = lunrIndex.query(function(query) {
+      query.term(lunr.tokenizer(q), { usePipeline: true })
+    })
     hits.forEach(function(hit) {
       const item = searchData[hit.ref]
       if (item !== undefined) {
@@ -86,6 +88,7 @@ function buildIndex() {
     lunrIndex = lunr(function() {
       this.pipeline.remove(lunr.stopWordFilter)
       this.ref('href')
+      this.field('href', { boost: 100 })
       this.field('title', { boost: 50 })
       this.field('keywords', { boost: 20 })
 
